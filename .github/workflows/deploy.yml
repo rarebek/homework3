@@ -19,8 +19,8 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Create hello.txt file
-        run: ssh -o StrictHostKeyChecking=no ubuntu@54.93.202.50 'touch /home/ubuntu/HELLOOOO.txt'
+      - name: git clone 
+        run: ssh -o StrictHostKeyChecking=no ubuntu@54.93.202.50 'git clone https://github.com/rarebek/homework3.git /home/ubuntu'
 
       - name: SSH into Azure server and run commands
         run: |
