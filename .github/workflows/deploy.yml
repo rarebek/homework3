@@ -1,10 +1,39 @@
+# name: Deploy to Azure
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Install SSH key
+#         uses: webfactory/ssh-agent@v0.5.3
+#         with:
+#           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+#       - name: git clone 
+#         run: ssh -o StrictHostKeyChecking=no ubuntu@54.93.202.50 'git clone https://github.com/rarebek/homework3.git ~'
+
+#       - name: SSH into Azure server and run commands
+#         run: |
+#           echo "Executing commands on Azure server..."  # Echo to indicate script execution
+#           ssh -o StrictHostKeyChecking=no ubuntu@54.93.202.50 'sudo docker stop $(sudo docker ps -a -q) && sudo docker rm $(sudo docker ps -a -q) && sudo docker rmi $(sudo docker images -a -q) && sudo docker-compose -f /home/ubuntu/homework3/docker-compose.yml up -d'
+#           echo "Script execution completed on Azure server."  # Echo after script execution
+
 name: Deploy to Azure
 
 on:
   push:
     branches:
       - main
-
 
 jobs:
   deploy:
@@ -19,11 +48,12 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: git clone 
-        run: ssh -o StrictHostKeyChecking=no ubuntu@54.93.202.50 'git clone https://github.com/rarebek/homework3.git'
+      - name: Clone repository
+        run: git clone https://github.com/rarebek/homework3.git ~/homework3
 
       - name: SSH into Azure server and run commands
         run: |
-          echo "Executing commands on Azure server..."  # Echo to indicate script execution
-          ssh -o StrictHostKeyChecking=no ubuntu@54.93.202.50 'sudo docker stop $(sudo docker ps -a -q) && sudo docker rm $(sudo docker ps -a -q) && sudo docker rmi $(sudo docker images -a -q) && sudo docker-compose -f /home/ubuntu/homework3/docker-compose.yml up -d'
-          echo "Script execution completed on Azure server."  # Echo after script execution
+          echo "Executing commands on Azure server..."
+          scp -o StrictHostKeyChecking=no -r ~/homework3 ubuntu@18.159.103.82:/home/ubuntu/
+          ssh -o StrictHostKeyChecking=no ubuntu@18.159.103.82 'sudo docker stop $(sudo docker ps -a -q) && sudo docker rm $(sudo docker ps -a -q) && sudo docker rmi $(sudo docker images -a -q) && sudo docker-compose -f /home/ubuntu/homework3/docker-compose.yml up -d'
+          echo "Script execution completed on Azure server."
