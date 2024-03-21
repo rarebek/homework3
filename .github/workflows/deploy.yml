@@ -19,8 +19,6 @@
 #         with:
 #           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-#       - name: git clone 
-#         run: ssh -o StrictHostKeyChecking=no ubuntu@54.93.202.50 'git clone https://github.com/rarebek/homework3.git ~'
 
 #       - name: SSH into Azure server and run commands
 #         run: |
@@ -48,12 +46,9 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Clone repository
-        run: git clone https://github.com/rarebek/homework3.git ~/homework3
 
       - name: SSH into Azure server and run commands
         run: |
           echo "Executing commands on Azure server..."
-          scp -o StrictHostKeyChecking=no -r ~/homework3 ubuntu@18.159.103.82:/home/ubuntu/
           ssh -o StrictHostKeyChecking=no ubuntu@18.159.103.82 'sudo docker stop $(sudo docker ps -a -q) && sudo docker rm $(sudo docker ps -a -q) && sudo docker rmi $(sudo docker images -a -q) && sudo docker-compose -f /home/ubuntu/homework3/docker-compose.yml up -d'
           echo "Script execution completed on Azure server."
