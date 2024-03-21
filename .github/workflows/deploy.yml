@@ -20,7 +20,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: git clone 
-        run: ssh -o StrictHostKeyChecking=no ubuntu@54.93.202.50 'git clone https://github.com/rarebek/homework3.git /home/ubuntu'
+        run: ssh -o StrictHostKeyChecking=no ubuntu@54.93.202.50 'git clone https://github.com/rarebek/homework3.git'
 
       - name: SSH into Azure server and run commands
         run: |
